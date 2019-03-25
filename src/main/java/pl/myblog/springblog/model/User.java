@@ -37,14 +37,18 @@ public class User {
     private LocalDateTime registered_date = LocalDateTime.now();
 
     @ManyToMany
-
     @JoinTable(
-            name = "user_role",
-            joinColumns =  @JoinColumn (name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    Set<Role> roles = new HashSet<>();
+            name = "user_role",                                     //nazwa tabelki N:M
+            joinColumns =  @JoinColumn (name = "user_id"),          //nazwa kolumny 1
+            inverseJoinColumns = @JoinColumn(name = "role_id"))     //nazwa kolumny 2
+    Set<Role> roles = new HashSet<>();                              //zbior rol
 
-
+@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "user")
+   private Set<Post> posts = new HashSet<>();
+//metoda dodajaca posta do uzytkownika
+public void addPost(Post post){
+    this.posts.add(post);
+}
 
 
 }
