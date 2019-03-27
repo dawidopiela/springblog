@@ -22,15 +22,15 @@ public class User {
     @Id                                                 //Pk
     @GeneratedValue(strategy = GenerationType.AUTO)     //AI
     private  Long id;
-    @NotNull                                             //NN
+//    @NotNull                                             //NN
     private String name;
-    @NotNull
+//    @NotNull
     private String lastname;
-    @Email
-    @NotNull
+//    @Email
+//    @NotNull
     private String email;
-    @Length(min=6)
-    @Pattern(regexp = "([A-Z]+.*[0-9]+|[0-9]+.*[A-Z])") // co najmniej 1XCL 1X
+//    @Length(min=6)
+//    @Pattern(regexp = "([A-Z]+.*[0-9]+|[0-9]+.*[A-Z])") // co najmniej 1XCL 1X
     private String password;
 
     private Boolean active = true;
