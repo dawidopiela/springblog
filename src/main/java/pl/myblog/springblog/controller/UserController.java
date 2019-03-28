@@ -33,7 +33,7 @@ public class UserController {
     }
 //odbior parametrow przeslanych przez formularz metodą Post
     @PostMapping("/register")
-    public String register(@ModelAttribute @Valid UserDto userDto, BindingResult bindingResult){
+    public String register(@ModelAttribute("user") @Valid UserDto userDto, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return "/register";
         }
@@ -41,5 +41,10 @@ public class UserController {
 
         System.out.println("Zarejestrowano:" + userService.addUser(userDto));
         return "redirect:/";
+    }
+    //logowanie-> wyswietlanie widoku html i oddanie w zarzadzanie websecurityconfig
+    @GetMapping("/login")
+    public String login(){
+        return "loginForm";
     }
 }

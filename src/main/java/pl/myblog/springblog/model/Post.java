@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -17,37 +18,38 @@ import java.util.Set;
 
 @Entity
 public class Post {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotNull
     private String title;
     @NotNull
-    @Type(type = "text")
+    @Type(type = "text")                    // longtext
     private String content;
     @Enumerated
     private PostCategory category;
     private LocalDateTime date_added = LocalDateTime.now();
-//FetchType.Lazy
-    //CascadeType.PErsist
-    //CascadeType.Merge
+
+    // FetchType.LAZY       - dane zostaną odczytane z bazy dopiero w momencie gdy nastąpi odwołanie do obiektu
+    // FetchType.EAGER      - dane zostaną odczytane z bazy natychmiast po utworzeniu obiektu nadrzędnego
+    // CascadeType.PERSIST
+    // CascadeType.MERGE
+    //
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-   private User user;
-// mapownaie user
+    private User user;
 
-@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "post")
-private Set<Comment> comments = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "post")
+    private Set<Comment> comments = new HashSet<>();
 
-    public Post( String title, String content, PostCategory category, User user) {
+    public Post(String title, String content, PostCategory category, User user) {
         this.title = title;
         this.content = content;
         this.category = category;
         this.user = user;
     }
-
-
+    public Post() {
+    }
 
     public Long getId() {
         return id;
@@ -103,11 +105,6 @@ private Set<Comment> comments = new HashSet<>();
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
-    }
-
-    public Post() {
-
-
     }
 
 }

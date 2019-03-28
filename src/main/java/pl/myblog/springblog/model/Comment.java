@@ -1,8 +1,11 @@
 package pl.myblog.springblog.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-
+import java.time.LocalDateTime;
+@Data
 @Entity
 public class Comment {
  @Id
@@ -11,6 +14,8 @@ public class Comment {
  @NotNull
     private  String message;
  private String author;
+
+ private LocalDateTime date_added = LocalDateTime.now();
 
  @ManyToOne
     @JoinColumn(name = "post_id")

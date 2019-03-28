@@ -49,6 +49,10 @@ public class User {
 public void addPost(Post post){
     this.posts.add(post);
 }
+//metoda dodajaca role dla uzytkownika
+public void addRole(Role role){
+    this.roles.add(role);
+}
 
 
 }
