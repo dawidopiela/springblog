@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import pl.myblog.springblog.model.Comment;
 import pl.myblog.springblog.model.Post;
 import pl.myblog.springblog.model.PostCategory;
+import pl.myblog.springblog.model.dto.CommentsDto;
 import pl.myblog.springblog.model.dto.PostDto;
 import pl.myblog.springblog.service.PostService;
 import pl.myblog.springblog.service.UserService;
@@ -64,6 +66,12 @@ public class PostController {
         Post post = postService.getPostById(id);
         model.addAttribute("post", post);
         model.addAttribute("auth", auth);
+        // wypisz komentarze dla danego posta
+        List<Comment> comments = postService.getCommentByPostId(id);
+        System.out.println("Komentarze: "+ comments);
+        model.addAttribute("comments", comments);
+        // obiekt comment do formularza
+        model.addAttribute("comment", new CommentsDto());
         return "post";
     }
 
@@ -92,8 +100,41 @@ public class PostController {
         Post updatedPost = postService.updatePost(id, post);
         model.addAttribute("post", updatedPost);
         model.addAttribute("auth", auth);
-        //wypisz komentarze dla danego posta
+        List<Comment> comments = postService.getCommentByPostId(id);
+        System.out.println("Komentarze: "+ comments);
+        model.addAttribute("comments", comments);
+//        // obiekt comment do formularza
+//
+//        //wypisz komentarze dla danego posta
+//
+        //dla zalogowanych przypisane imie
+        CommentsDto commentsDto = new CommentsDto();
+        if(auth!= null){
+            String name = userService.getUserById(auth).getName();
+            commentsDto.setAuthor(name);
+
+        }
+        model.addAttribute("comment", new CommentsDto());
         return "post";
+    }
+    @PostMapping("/addcomment/{id}")
+    public String addComment(@PathVariable("id") Long id_post,
+                             @ModelAttribute("comment") @Valid CommentsDto commentsDto,
+                             BindingResult bindingResult,
+                             Model model,
+                             Authentication auth) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("auth", auth);
+            List<Comment> comments = postService.getCommentByPostId(id_post);
+            System.out.println("Komentarze:"+ comments);
+            model.addAttribute("comments", comments);
+            model.addAttribute("post", postService.getPostById(id_post));
+
+            return "redirect:/allposts/" + id_post;
+        }
+        //zapis komentarza przez serwis
+        postService.addCommentToPost(id_post, commentsDto);
+      return  "redirect:/allposts/" + id_post;
     }
 
     @GetMapping("/addpost")
@@ -130,11 +171,11 @@ public class PostController {
     }
 
 
-    @GetMapping("/contact")
-    public String contact(Model model, Authentication auth) {
-        model.addAttribute("auth", auth);
-        return "contact";
-    }
+//    @GetMapping("/contact")
+//    public String contact(Model model, Authentication auth) {
+//        model.addAttribute("auth", auth);
+//        return "contact";
+//    }
 
 }
 

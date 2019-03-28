@@ -50,6 +50,9 @@ public class Post {
     }
     public Post() {
     }
+public void addComment(Comment comment){
+        this.comments.add(comment);
+}
 
     public Long getId() {
         return id;

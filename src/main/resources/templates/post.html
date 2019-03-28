@@ -87,6 +87,8 @@
 </article>
 <hr>
 <!--Dodawanie komentarzy-->
+<h1 align=" center">Comments</h1>
+<p th:if="${comments.size()==0}" align="center" class="post-meta">No comment added yet</p>
 <div th:each="comment : ${comments}" class="container">
     <p th:text="${comment.getMessage()}" class="post-meta"> comment </p>
     <p th:text="${'Posted by ' + comment.getAuthor()}" style="font-size:60%;" class="post-meta"> author </p>
@@ -120,15 +122,89 @@
 <!--<button type="submit" class="btn btn-primary" id="sendMessageButton">add comment</button>-->
 <!--</div>-->
 <!--</form>-->
-
-
-
-<!-- Footer -->
-<footer>
+<h1 align="center">Add new comment</h1>
+<article>
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
-                <ul class="list-inline text-center">
+                <form th:action="@{'/addcomment/'+${post.getId()}}" th:method="post" th:object="${comment}" name="sentMessage"
+                      id="contactForm" novalidate>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls">
+                            <label>Message</label>
+                            <textarea th:field="*{message}" rows="2" type="text" class="form-control"
+                                      placeholder="message" id="message" required
+                                      data-validation-required-message="Please enter your comment."></textarea>
+                            <span th:errors="*{message}">error-message</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls">
+                            <label>Author</label>
+                            <input th:field="*{author}" th:type="text" class="form-control" placeholder="author"
+                                   id="name" required data-validation-required-message="Please enter your name.">
+                            <span th:errors="*{author}">error-message</span>
+                        </div>
+                    </div>
+                    <br>
+                    <div id="success"></div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="sendMessageButton">add comment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Footer -->
+<h1 align="center">Add new comment</h1>
+<article>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <form th:action="@{'/addcomment/'+${post.getId()}}" th:method="post" th:object="${comment}" name="sentMessage"
+                      id="contactForm" novalidate>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls">
+                            <label>Message</label>
+                            <textarea th:field="*{message}" rows="2" type="text" class="form-control"
+                                      placeholder="message" id="message" required
+                                      data-validation-required-message="Please enter your comment."></textarea>
+                            <span th:errors="*{message}">error-message</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="form-group floating-label-form-group controls">
+                            <label>Author</label>
+                            <input th:field="*{author}" th:type="text" class="form-control" placeholder="author"
+                                   id="name" required data-validation-required-message="Please enter your name.">
+                            <span th:errors="*{author}">error-message</span>
+                        </div>
+                    </div>
+                    <br>
+                    <div id="success"></div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="sendMessageButton">add comment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <ul class="list-inline text-center">
+                        <li class="list-inline-item">
+                            <a href="#">
+                <span class="fa-stack fa-lg">
+                  <i class="fas fa-circle fa-stack-2x"></i>
+                  <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                </span>
+
                     <li class="list-inline-item">
                         <a href="#">
                 <span class="fa-stack fa-lg">

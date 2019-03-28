@@ -9,12 +9,14 @@ import pl.myblog.springblog.model.Comment;
 import pl.myblog.springblog.model.Post;
 //import pl.myblog.springblog.model.User;
 import pl.myblog.springblog.model.User;
+import pl.myblog.springblog.model.dto.CommentsDto;
 import pl.myblog.springblog.model.dto.PostDto;
 //import pl.myblog.springblog.repository.CommentRepository;
 import pl.myblog.springblog.repository.CommentRepository;
 import pl.myblog.springblog.repository.PostRepository;
 import pl.myblog.springblog.repository.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -80,5 +82,19 @@ public class PostService {
             .sorted(Comparator.comparing(Comment::getDate_added).reversed())
             .collect(Collectors.toList());
     }
+public Comment addCommentToPost(Long id_post, CommentsDto commentsDto){
 
+    Post post = postRepository.getOne(id_post);
+    //dodaj komentarz do posta
+    Comment comment = new Comment(
+            commentsDto.getMessage(),
+            commentsDto.getAuthor(),
+            LocalDateTime.now(),
+            post
+
+    );
+    post.addComment(comment);
+    //zapisz komentarz w db
+return commentRepository.save(comment);
+}
 }
